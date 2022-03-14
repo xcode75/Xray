@@ -1,0 +1,169 @@
+package panel
+
+import (
+	"encoding/json"
+	io "io/ioutil"
+	"log"
+	"sync"
+
+	"github.com/xcode75/Xray/api"
+	"github.com/xcode75/Xray/api/xmanager"
+	"github.com/xcode75/Xray/app/mydispatcher"
+	_ "github.com/xcode75/Xray/main/distro/all"
+	"github.com/xcode75/Xray/service"
+	"github.com/xcode75/Xray/service/controller"
+	"github.com/imdario/mergo"
+	"github.com/r3labs/diff/v2"
+	"github.com/xcode75/xraycore/app/proxyman"
+	"github.com/xcode75/xraycore/app/stats"
+	"github.com/xcode75/xraycore/app/router"
+	"github.com/xcode75/xraycore/common/serial"
+	"github.com/xcode75/xraycore/core"
+	"github.com/xcode75/xraycore/infra/conf"
+)
+
+// Panel Structure
+type Panel struct {
+	access      sync.Mutex
+	panelConfig *Config
+	Server      *core.Instance
+	Service     []service.Service
+	Running     bool
+}
+
+func New(panelConfig *Config) *Panel {
+	p := &Panel{panelConfig: panelConfig}
+	return p
+}
+
+func (p *Panel) loadCore(panelConfig *Config) *core.Instance {
+	// Log Config
+	coreLogConfig := &conf.LogConfig{}
+	logConfig := getDefaultLogConfig()
+	if panelConfig.LogConfig != nil {
+		if _, err := diff.Merge(logConfig, panelConfig.LogConfig, logConfig); err != nil {
+			log.Panicf("Read Log config failed: %s", err)
+		}
+	}
+	coreLogConfig.LogLevel = logConfig.Level
+	coreLogConfig.AccessLog = logConfig.AccessPath
+	coreLogConfig.ErrorLog = logConfig.ErrorPath
+
+	// DNS config
+	coreDnsConfig := &conf.DNSConfig{}
+	if panelConfig.DnsConfigPath != "" {
+		if data, err := io.ReadFile(panelConfig.DnsConfigPath); err != nil {
+			log.Panicf("Failed to read file at: %s", panelConfig.DnsConfigPath)
+		} else {
+			if err = json.Unmarshal(data, coreDnsConfig); err != nil {
+				log.Panicf("Failed to unmarshal: %s", panelConfig.DnsConfigPath)
+			}
+		}
+	}
+	dnsConfig, err := coreDnsConfig.Build()
+	if err != nil {
+		log.Panicf("Failed to understand dns.json, Please check: https://xtls.github.io/config/base/dns/ for help: %s", err)
+	}
+	
+	
+	// Policy config
+	levelPolicyConfig := parseConnectionConfig(panelConfig.ConnetionConfig)
+	corePolicyConfig := &conf.PolicyConfig{}
+	corePolicyConfig.Levels = map[uint32]*conf.Policy{0: levelPolicyConfig}
+	policyConfig, _ := corePolicyConfig.Build()
+	config := &core.Config{
+		App: []*serial.TypedMessage{
+			serial.ToTypedMessage(coreLogConfig.Build()),
+			serial.ToTypedMessage(&mydispatcher.Config{}),
+			serial.ToTypedMessage(&stats.Config{}),
+			serial.ToTypedMessage(&proxyman.InboundConfig{}),
+			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
+			serial.ToTypedMessage(policyConfig),
+			serial.ToTypedMessage(dnsConfig),
+			serial.ToTypedMessage(&router.Config{}),
+		},
+	}
+	server, err := core.New(config)
+	if err != nil {
+		log.Panicf("failed to create instance: %s", err)
+	}
+	log.Printf("Xray Core Version: %s", core.Version())
+
+	return server
+}
+
+// Start Start the panel
+func (p *Panel) Start() {
+	p.access.Lock()
+	defer p.access.Unlock()
+	log.Print("Starting Xray..")
+	// Load Core
+	server := p.loadCore(p.panelConfig)
+	if err := server.Start(); err != nil {
+		log.Panicf("Failed to start instance: %s", err)
+	}
+	p.Server = server
+	// Load Nodes config
+	for _, nodeConfig := range p.panelConfig.NodesConfig {
+		var apiClient api.API
+		apiClient = xmanager.New(nodeConfig.ApiConfig)
+		
+		var controllerService service.Service
+		// Regist controller service
+		controllerConfig := getDefaultControllerConfig()
+		if nodeConfig.ControllerConfig != nil {
+			if err := mergo.Merge(controllerConfig, nodeConfig.ControllerConfig, mergo.WithOverride); err != nil {
+				log.Panicf("Read Controller Config Failed")
+			}
+		}
+		controllerService = controller.New(server, apiClient, controllerConfig)
+		p.Service = append(p.Service, controllerService)
+
+	}
+
+	// Start all the service
+	for _, s := range p.Service {
+		err := s.Start()
+		if err != nil {
+			log.Panicf("Xray Service Start fialed: %s", err)
+		}
+	}
+	p.Running = true
+	return
+}
+
+// Close Close the panel
+func (p *Panel) Close() {
+	p.access.Lock()
+	defer p.access.Unlock()
+	for _, s := range p.Service {
+		err := s.Close()
+		if err != nil {
+			log.Panicf("Xray Service Close fialed: %s", err)
+		}
+	}
+	p.Service = nil
+	p.Server.Close()
+	p.Running = false
+	return
+}
+
+func parseConnectionConfig(c *ConnetionConfig) (policy *conf.Policy) {
+	connetionConfig := getDefaultConnetionConfig()
+	if c != nil {
+		if _, err := diff.Merge(connetionConfig, c, connetionConfig); err != nil {
+			log.Panicf("Read ConnetionConfig failed: %s", err)
+		}
+	}
+	policy = &conf.Policy{
+		StatsUserUplink:   true,
+		StatsUserDownlink: true,
+		Handshake:         &connetionConfig.Handshake,
+		ConnectionIdle:    &connetionConfig.ConnIdle,
+		UplinkOnly:        &connetionConfig.UplinkOnly,
+		DownlinkOnly:      &connetionConfig.DownlinkOnly,
+		BufferSize:        &connetionConfig.BufferSize,
+	}
+
+	return
+}
