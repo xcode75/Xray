@@ -11,8 +11,8 @@ FROM  alpine
 RUN  apk --update --no-cache add tzdata ca-certificates \
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-RUN wget  https://github.com/Loyalsoldier/v2ray-rules-dat/releases/download/202203132210/geoip.dat  -O  /usr/local/bin/geoip.dat
-RUN wget  https://github.com/Loyalsoldier/v2ray-rules-dat/releases/download/202203132210/geosite.dat -O  /usr/local/bin/geosite.dat
+COPY geoip.dat  /usr/local/bin/geoip.dat
+COPY geosite.dat  /usr/local/bin/geosite.dat
  	
 RUN mkdir /etc/Xray/
 COPY --from=builder /app/Xray /usr/local/bin
