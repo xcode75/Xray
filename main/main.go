@@ -23,7 +23,7 @@ var (
 )
 
 var (
-	version  = "v0.7.6.4"
+	version  = "v0.7.6.5"
 	maintainer = "Maintainer: Github/xcode75"
 	intro    = "An Xray Server For XManager"
 	credits  = "Credits : Github/XrayR-project"
