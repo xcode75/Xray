@@ -68,3 +68,8 @@ Nodes:
           CLOUDFLARE_API_KEY:                                    # Cloudflare global api key
 
 ```
+
+## Thanks
+
+* [Project X](https://github.com/XTLS)
+* [XrayR](https://github.com/XrayR-project/XrayR)
