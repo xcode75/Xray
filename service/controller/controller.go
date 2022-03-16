@@ -338,11 +338,11 @@ func (c *Controller) addNewTag(newNodeInfo *api.NodeInfo) (err error) {
 				return err
 			}
 			
-			outBoundConfig, err := BlackholeBuilder(c.config)
+			BlackholeoutBoundConfig, err := BlackholeBuilder(c.config)
 			if err != nil {
 				return err
 			}
-			err = c.addOutbound(outBoundConfig)
+			err = c.addOutbound(BlackholeoutBoundConfig)
 			if err != nil {
 				return err
 			}
@@ -364,11 +364,11 @@ func (c *Controller) Relay(newRelayNodeInfo *api.RelayNodeInfo, userInfo *[]api.
 			if err != nil {
 				return err
 			}
-			outBoundConfig, err := BlackholeBuilder(c.config)
+			BlackholeoutBoundConfig, err := BlackholeBuilder(c.config)
 			if err != nil {
 				return err
 			}
-			err = c.addOutbound(outBoundConfig)
+			err = c.addOutbound(BlackholeoutBoundConfig)
 			if err != nil {
 				return err
 			}
@@ -403,11 +403,11 @@ func (c *Controller) addInboundForSSPlugin(newNodeInfo api.NodeInfo) (err error)
 
 		return err
 	}
-	outBoundConfig, err := BlackholeBuilder(c.config)
+	BlackholeoutBoundConfig, err := BlackholeBuilder(c.config)
 	if err != nil {
 		return err
 	}
-	err = c.addOutbound(outBoundConfig)
+	err = c.addOutbound(BlackholeoutBoundConfig)
 	if err != nil {
 		return err
 	}
