@@ -69,9 +69,9 @@ func BlackholeBuilder(config *Config) (*core.OutboundHandlerConfig, error) {
 	responses := make(map[string]string)
 	responses["type"] = "http"
 	var response json.RawMessage
-	response, err := json.Marshal(responses)
-	if err != nil {
-			return nil, fmt.Errorf("Marshal Response Type %s into config fialed: %s", response, err)
+	response, errr := json.Marshal(responses)
+	if errr != nil {
+			return nil, fmt.Errorf("Marshal Response Type %s into config fialed: %s", response, errr)
 	}
 	
 	proxySetting := &conf.BlackholeConfig{
