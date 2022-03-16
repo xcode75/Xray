@@ -53,6 +53,39 @@ func OutboundBuilder(config *Config, nodeInfo *api.NodeInfo, tag string) (*core.
 	return outboundDetourConfig.Build()
 }
 
+//OutboundBuilder build Blackhole outbund config for addoutbound
+func BlackholeBuilder(config *Config) (*core.OutboundHandlerConfig, error) {
+	outboundDetourConfig := &conf.OutboundDetourConfig{}
+	outboundDetourConfig.Protocol = "blackhole"
+	outboundDetourConfig.Tag = "block"
+
+	// Build Send IP address
+	if config.SendIP != "" {
+		ipAddress := net.ParseAddress(config.SendIP)
+		outboundDetourConfig.SendThrough = &conf.Address{ipAddress}
+	}
+
+	// Blackhole Protocol setting
+	responses := make(map[string]string)
+	responses["type"] = "http"
+	var responses json.RawMessage
+	response, err := json.Marshal(responses)
+	if err != nil {
+			return nil, fmt.Errorf("Marshal Response Type %s into config fialed: %s", response, err)
+	}
+	
+	proxySetting := &conf.BlackholeConfig{
+		Response : response,
+	}
+	
+	var setting json.RawMessage
+	setting, err := json.Marshal(proxySetting)
+	if err != nil {
+		return nil, fmt.Errorf("Marshal blackhole settings into config fialed: %s", err)
+	}
+	outboundDetourConfig.Settings = &setting
+	return outboundDetourConfig.Build()
+}
 
 type TrojanServerTarget struct {
 	Address  string   `json:"address"`

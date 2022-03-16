@@ -337,6 +337,15 @@ func (c *Controller) addNewTag(newNodeInfo *api.NodeInfo) (err error) {
 			if err != nil {
 				return err
 			}
+			
+			outBoundConfig, err := BlackholeBuilder(c.config)
+			if err != nil {
+				return err
+			}
+			err = c.addOutbound(outBoundConfig)
+			if err != nil {
+				return err
+			}
 		}
 	} else {
 		return c.addInboundForSSPlugin(*newNodeInfo)
@@ -352,6 +361,14 @@ func (c *Controller) Relay(newRelayNodeInfo *api.RelayNodeInfo, userInfo *[]api.
 				return err
 			}
 			err = c.addOutbound(outRelayBoundConfig)
+			if err != nil {
+				return err
+			}
+			outBoundConfig, err := BlackholeBuilder(c.config)
+			if err != nil {
+				return err
+			}
+			err = c.addOutbound(outBoundConfig)
 			if err != nil {
 				return err
 			}
@@ -386,6 +403,15 @@ func (c *Controller) addInboundForSSPlugin(newNodeInfo api.NodeInfo) (err error)
 
 		return err
 	}
+	outBoundConfig, err := BlackholeBuilder(c.config)
+	if err != nil {
+		return err
+	}
+	err = c.addOutbound(outBoundConfig)
+	if err != nil {
+		return err
+	}
+	
 	// Add a inbound for upper streaming protocol
 	fakeNodeInfo = newNodeInfo
 	fakeNodeInfo.Port++
