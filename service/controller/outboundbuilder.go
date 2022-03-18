@@ -54,10 +54,10 @@ func OutboundBuilder(config *Config, nodeInfo *api.NodeInfo, tag string) (*core.
 }
 
 //OutboundBuilder build Blackhole outbund config for addoutbound
-func BlackholeBuilder(config *Config) (*core.OutboundHandlerConfig, error) {
+func BlackholeBuilder(config *Config, nodeInfo *api.NodeInfo) (*core.OutboundHandlerConfig, error) {
 	outboundDetourConfig := &conf.OutboundDetourConfig{}
-	outboundDetourConfig.Protocol = "blackhole"
-	outboundDetourConfig.Tag = "block"
+	outboundDetourConfig.Protocol = nodeInfo."blackhole"
+	outboundDetourConfig.Tag = fmt.Sprintf("Block_Node_ID_%d", nodeInfo.NodeID)
 
 	// Build Send IP address
 	if config.SendIP != "" {

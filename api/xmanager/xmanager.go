@@ -12,6 +12,8 @@ import (
 
 	"github.com/xcode75/Xray/api"
 	"github.com/go-resty/resty/v2"
+	"github.com/xcode75/xraycore/infra/conf"
+	"github.com/xcode75/xraycore/app/router"
 )
 
 
@@ -175,6 +177,24 @@ func (c *APIClient) GetUserList() (UserList *[]api.UserInfo, err error) {
 		return nil, fmt.Errorf("Parse user list failed: %s", string(res))
 	}
 	return userList, nil
+}
+
+func (c *APIClient) GetRouteInfo() (routeConfig *router.Config, err error) {
+	path := fmt.Sprintf("/api/routing/%d/info", c.NodeID)
+	res, err := c.client.R().
+		SetResult(&Response{}).
+		ForceContentType("application/json").
+		Get(path)
+	response, err := c.parseResponse(res, path, err)
+	if err != nil {
+		return nil, err
+	}
+
+	coreRouterConfig := &conf.RouterConfig{}
+	if err := json.Unmarshal(response.Data, coreRouterConfig); err != nil {
+		return nil, fmt.Errorf("Unmarshal %s failed: %s", reflect.TypeOf(coreRouterConfig), err)
+	}
+    return coreRouterConfig.Build()	
 }
 
 // ReportNodeStatus reports the node status to the xmanager

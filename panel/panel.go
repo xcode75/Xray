@@ -16,7 +16,7 @@ import (
 	"github.com/r3labs/diff/v2"
 	"github.com/xcode75/xraycore/app/proxyman"
 	"github.com/xcode75/xraycore/app/stats"
-	//"github.com/xcode75/xraycore/app/router"
+	"github.com/xcode75/xraycore/app/router"
 	"github.com/xcode75/xraycore/common/serial"
 	"github.com/xcode75/xraycore/core"
 	"github.com/xcode75/xraycore/infra/conf"
@@ -64,23 +64,7 @@ func (p *Panel) loadCore(panelConfig *Config) *core.Instance {
 	if err != nil {
 		log.Panicf("Failed to understand dns.json, Please check: https://xtls.github.io/config/base/dns/ for help: %s", err)
 	}
-	
-	// Routing config
-	coreRouterConfig := &conf.RouterConfig{}
-	if panelConfig.RouteConfigPath != "" {
-		if data, err := io.ReadFile(panelConfig.RouteConfigPath); err != nil {
-			log.Panicf("Failed to read file at: %s", panelConfig.RouteConfigPath)
-		} else {
-			if err = json.Unmarshal(data, coreRouterConfig); err != nil {
-				log.Panicf("Failed to unmarshal: %s", panelConfig.RouteConfigPath)
-			}
-		}
-	}
-	routeConfig, err := coreRouterConfig.Build()
-	if err != nil {
-		log.Panicf("Failed to understand dns.json, Please check: https://xtls.github.io/config/base/routing/ for help: %s", err)
-	}
-	
+
 	// Policy config
 	levelPolicyConfig := parseConnectionConfig(panelConfig.ConnetionConfig)
 	corePolicyConfig := &conf.PolicyConfig{}
@@ -95,8 +79,7 @@ func (p *Panel) loadCore(panelConfig *Config) *core.Instance {
 			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
 			serial.ToTypedMessage(policyConfig),
 			serial.ToTypedMessage(dnsConfig),
-			serial.ToTypedMessage(routeConfig),
-			//serial.ToTypedMessage(&router.Config{}),
+			serial.ToTypedMessage(&router.Config{}),
 		},
 	}
 	server, err := core.New(config)
