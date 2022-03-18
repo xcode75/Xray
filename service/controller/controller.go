@@ -384,14 +384,6 @@ func (c *Controller) Relay(newRelayNodeInfo *api.RelayNodeInfo, userInfo *[]api.
 			if err != nil {
 				return err
 			}
-			BlackholeoutBoundConfig, err := BlackholeBuilder(c.config, newRelayNodeInfo)
-			if err != nil {
-				return err
-			}
-			err = c.addOutbound(BlackholeoutBoundConfig)
-			if err != nil {
-				return err
-			}
 			c.AddUserRoutingRule(fmt.Sprintf("Relay_%s|%d", c.RelayTag,user.UID), []string{fmt.Sprintf("%s|%s|%d", c.Tag, user.Email, user.UID)})		
 		}
 	}	

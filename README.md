@@ -40,7 +40,7 @@ Nodes:
       NodeID: 2                                                  # Node ID
       Timeout: 30                                                # Query Node info timeout
       DeviceLimit: 0                                             # Local settings will replace remote settings, 0 means disable
-      RuleListPath: #/etc/Xray/rulelist                          #Path to local rulelist file
+      RuleListPath: #/etc/Xray/rulelist                          # Path to local rulelist file
     ControllerConfig:
       SendIP: 0.0.0.0                                            # IP address you want to send pacakage
       UpdatePeriodic: 60                                         # Time to update the nodeinfo, how many sec.
