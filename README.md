@@ -26,7 +26,6 @@ Log:
   AccessPath: #/etc/Xray/access.Log                             # Access log path
   ErrorPath: #/etc/Xray/error.log                               # Error log path
 DnsConfigPath: /etc/Xray/dns.json                               # https://xtls.github.io/config/base/dns/
-RouteConfigPath: # /etc/Xray/route.json                         # Path to route config, check https://xtls.github.io/config/routing.html for help
 ConnetionConfig:                                                # By customizing the relevant configuration released by the ConnetionConfig connection, the memory usage can be optimized to a certain extent
   Handshake: 15                                                 # Handshake time limit when the connection is established. The unit is seconds. The default value is 4. When the inbound proxy processes a new connection, if the time used in the handshake phase exceeds this time, the connection is terminated.
   ConnIdle: 300                                                 # Reducing ConnIdle may be able to optimize the memory usage when the number of connections is high, but it will lead to higher user connection delays.
