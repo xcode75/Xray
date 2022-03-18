@@ -40,7 +40,7 @@ func OutboundBuilder(config *Config, nodeInfo *api.NodeInfo, tag string) (*core.
 	}
 	
 	if nodeInfo.NodeType == "dokodemo-door" {
-		proxySetting.Redirect = fmt.Sprintf("0.0.0.0:%d", nodeInfo.Port-1)
+		proxySetting.Redirect = fmt.Sprintf("127.0.0.1:%d", nodeInfo.Port-1)
 	}
 	
 	var setting json.RawMessage
