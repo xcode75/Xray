@@ -84,9 +84,9 @@ require (
 	github.com/liquidweb/liquidweb-go v1.6.3 // indirect
 	github.com/lucas-clemente/quic-go v0.26.0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
-	github.com/marten-seemann/qtls-go1-16 v0.1.4 // indirect
-	github.com/marten-seemann/qtls-go1-17 v0.1.0 // indirect
-	github.com/marten-seemann/qtls-go1-18 v0.1.0-beta.1 // indirect
+	github.com/marten-seemann/qtls-go1-16 v0.1.5 // indirect
+	github.com/marten-seemann/qtls-go1-17 v0.1.1 // indirect
+	github.com/marten-seemann/qtls-go1-18 v0.1.1 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/miekg/dns v1.1.47 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
