@@ -82,7 +82,7 @@ require (
 	github.com/liquidweb/go-lwApi v0.0.5 // indirect
 	github.com/liquidweb/liquidweb-cli v0.6.10 // indirect
 	github.com/liquidweb/liquidweb-go v1.6.3 // indirect
-	github.com/lucas-clemente/quic-go v0.25.0 // indirect
+	github.com/lucas-clemente/quic-go v0.26.0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/marten-seemann/qtls-go1-16 v0.1.4 // indirect
 	github.com/marten-seemann/qtls-go1-17 v0.1.0 // indirect
