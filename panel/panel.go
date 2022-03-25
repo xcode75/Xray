@@ -16,7 +16,6 @@ import (
 	"github.com/r3labs/diff/v2"
 	"github.com/xcode75/xraycore/app/proxyman"
 	"github.com/xcode75/xraycore/app/stats"
-	"github.com/xcode75/xraycore/app/router"
 	"github.com/xcode75/xraycore/common/serial"
 	"github.com/xcode75/xraycore/core"
 	"github.com/xcode75/xraycore/infra/conf"
@@ -65,6 +64,42 @@ func (p *Panel) loadCore(panelConfig *Config) *core.Instance {
 		log.Panicf("Failed to understand dns.json, Please check: https://xtls.github.io/config/base/dns/ for help: %s", err)
 	}
 
+// Routing config
+	coreRouterConfig := &conf.RouterConfig{}
+	if panelConfig.RouteConfigPath != "" {
+		if data, err := io.ReadFile(panelConfig.RouteConfigPath); err != nil {
+			log.Panicf("Failed to read file at: %s", panelConfig.RouteConfigPath)
+		} else {
+			if err = json.Unmarshal(data, coreRouterConfig); err != nil {
+				log.Panicf("Failed to unmarshal: %s", panelConfig.RouteConfigPath)
+			}
+		}
+	}
+
+	routeConfig, err := coreRouterConfig.Build()
+	if err != nil {
+		log.Panicf("Failed to understand route.json, Please check: https://xtls.github.io/config/base/routing/ for help: %s", err)
+	}
+	// Custom Outbound config
+	coreCustomOutboundConfig := []conf.OutboundDetourConfig{}
+	if panelConfig.OutboundConfigPath != "" {
+		if data, err := io.ReadFile(panelConfig.OutboundConfigPath); err != nil {
+			log.Panicf("Failed to read file at: %s", panelConfig.OutboundConfigPath)
+		} else {
+			if err = json.Unmarshal(data, &coreCustomOutboundConfig); err != nil {
+				log.Panicf("Failed to unmarshal: %s", panelConfig.OutboundConfigPath)
+			}
+		}
+	}
+	outBoundConfig := []*core.OutboundHandlerConfig{}
+	for _, config := range coreCustomOutboundConfig {
+		oc, err := config.Build()
+		if err != nil {
+			log.Panicf("Failed to understand outbound.json, Please check: https://xtls.github.io/config/base/outbounds/ for help: %s", err)
+		}
+		outBoundConfig = append(outBoundConfig, oc)
+	}	
+	
 	// Policy config
 	levelPolicyConfig := parseConnectionConfig(panelConfig.ConnetionConfig)
 	corePolicyConfig := &conf.PolicyConfig{}
@@ -79,8 +114,9 @@ func (p *Panel) loadCore(panelConfig *Config) *core.Instance {
 			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
 			serial.ToTypedMessage(policyConfig),
 			serial.ToTypedMessage(dnsConfig),
-			serial.ToTypedMessage(&router.Config{}),
+			serial.ToTypedMessage(routeConfig),
 		},
+		Outbound: outBoundConfig,
 	}
 	server, err := core.New(config)
 	if err != nil {

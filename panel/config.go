@@ -9,6 +9,8 @@ type Config struct {
 	LogConfig          *LogConfig       `mapstructure:"Log"`
 	DnsConfigPath      string           `mapstructure:"DnsConfigPath"`
 	ConnetionConfig    *ConnetionConfig `mapstructure:"ConnetionConfig"`
+	OutboundConfigPath string           `mapstructure:"OutboundConfigPath"`
+	RouteConfigPath    string           `mapstructure:"RouteConfigPath"`
 	NodesConfig        []*NodesConfig   `mapstructure:"Nodes"`
 }
 

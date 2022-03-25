@@ -166,7 +166,7 @@ func (c *Controller) GetDetectResult(tag string) (*[]api.DetectResult, error) {
 
 func (c *Controller) AddUserRoutingRule(tag string, email []string) {
 	dispather := c.server.GetFeature(routing.RouterType()).(*router.Router)
-	dispather.AddUsers(tag, email)
+	dispather.AddUser(tag, email)
 }
 
 func (c *Controller) RemoveUserRoutingRule(email []string)  {

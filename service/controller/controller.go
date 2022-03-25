@@ -84,16 +84,6 @@ func (c *Controller) Start() error {
 		log.Panic(err)
 		return err
 	}
-
-	RouteRules, err := c.apiClient.GetRouteInfo()
-	if err != nil {
-		log.Panic(err)
-		return nil
-	}
-    if RouteRules == nil {
-		log.Panic(RouteRules)
-		return nil
-	}
 		
 	err = c.addNewUser(userInfo, newNodeInfo)
 	if err != nil {
@@ -225,16 +215,6 @@ func (c *Controller) nodeInfoMonitor() (err error) {
 			log.Panic(err)
 			return err
 		}
-		
-		RouteRules, err := c.apiClient.GetRouteInfo()
-		if err != nil {
-			log.Panic(err)
-			return nil
-		}
-		if RouteRules == nil {
-			log.Panic(RouteRules)
-			return nil
-		}
 				
 		nodeInfoChanged = true
 		// Remove Old limiter
@@ -357,15 +337,6 @@ func (c *Controller) addNewTag(newNodeInfo *api.NodeInfo) (err error) {
 			if err != nil {
 				return err
 			}
-			
-			BlackholeoutBoundConfig, err := BlackholeBuilder(c.config, newNodeInfo)
-			if err != nil {
-				return err
-			}
-			err = c.addOutbound(BlackholeoutBoundConfig)
-			if err != nil {
-				return err
-			}
 		}
 	} else {
 		return c.addInboundForSSPlugin(*newNodeInfo)
@@ -415,15 +386,7 @@ func (c *Controller) addInboundForSSPlugin(newNodeInfo api.NodeInfo) (err error)
 
 		return err
 	}
-	BlackholeoutBoundConfig, err := BlackholeBuilder(c.config, &fakeNodeInfo)
-	if err != nil {
-		return err
-	}
-	err = c.addOutbound(BlackholeoutBoundConfig)
-	if err != nil {
-		return err
-	}
-	
+
 	// Add a inbound for upper streaming protocol
 	fakeNodeInfo = newNodeInfo
 	fakeNodeInfo.Port++

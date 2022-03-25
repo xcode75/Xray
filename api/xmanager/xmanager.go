@@ -9,11 +9,10 @@ import (
 	"reflect"
 	"strconv"
 	"time"
+	"regexp"
 
 	"github.com/xcode75/Xray/api"
 	"github.com/go-resty/resty/v2"
-	"github.com/xcode75/xraycore/infra/conf"
-	"github.com/xcode75/xraycore/app/router"
 )
 
 
@@ -79,7 +78,7 @@ func readLocalRuleList(path string) (LocalRuleList []api.DetectRule) {
 		for fileScanner.Scan() {
 			LocalRuleList = append(LocalRuleList, api.DetectRule{
 				ID:      -1,
-				Pattern: fileScanner.Text(),
+				Pattern: regexp.MustCompile(fileScanner.Text()),
 			})
 		}
 		// handle first encountered error while reading
@@ -179,23 +178,7 @@ func (c *APIClient) GetUserList() (UserList *[]api.UserInfo, err error) {
 	return userList, nil
 }
 
-func (c *APIClient) GetRouteInfo() (routeConfig *router.Config, err error) {
-	path := fmt.Sprintf("/api/routing/%d/info", c.NodeID)
-	res, err := c.client.R().
-		SetResult(&Response{}).
-		ForceContentType("application/json").
-		Get(path)
-	response, err := c.parseResponse(res, path, err)
-	if err != nil {
-		return nil, err
-	}
 
-	coreRouterConfig := &conf.RouterConfig{}
-	if err := json.Unmarshal(response.Data, coreRouterConfig); err != nil {
-		return nil, fmt.Errorf("Unmarshal %s failed: %s", reflect.TypeOf(coreRouterConfig), err)
-	}
-    return coreRouterConfig.Build()	
-}
 
 // ReportNodeStatus reports the node status to the xmanager
 func (c *APIClient) ReportNodeStatus(nodeStatus *api.NodeStatus) (err error) {
@@ -288,7 +271,7 @@ func (c *APIClient) GetNodeRule() (*[]api.DetectRule, error) {
 	for _, r := range *ruleListResponse {
 		ruleList = append(ruleList, api.DetectRule{
 			ID:      r.ID,
-			Pattern: r.Content,
+			Pattern: regexp.MustCompile(r.Content),
 		})
 	}
 	return &ruleList, nil

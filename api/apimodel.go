@@ -1,5 +1,8 @@
 package api
 
+import (
+	"regexp"
+)
 
 // API config
 type Config struct {
@@ -94,7 +97,7 @@ type ClientInfo struct {
 
 type DetectRule struct {
 	ID      int
-	Pattern string
+	Pattern *regexp.Regexp
 }
 
 type DetectResult struct {
