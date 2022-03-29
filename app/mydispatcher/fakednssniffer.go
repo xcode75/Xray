@@ -4,11 +4,11 @@ import (
 	"context"
 	"strings"
 
-	"github.com/xcode75/xraycore/common"
-	"github.com/xcode75/xraycore/common/net"
-	"github.com/xcode75/xraycore/common/session"
-	"github.com/xcode75/xraycore/core"
-	"github.com/xcode75/xraycore/features/dns"
+	"github.com/xcode75/xray-core/common"
+	"github.com/xcode75/xray-core/common/net"
+	"github.com/xcode75/xray-core/common/session"
+	"github.com/xcode75/xray-core/core"
+	"github.com/xcode75/xray-core/features/dns"
 )
 
 // newFakeDNSSniffer Create a Fake DNS metadata sniffer

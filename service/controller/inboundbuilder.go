@@ -7,10 +7,10 @@ import (
 
 	"github.com/xcode75/Xray/api"
 	"github.com/xcode75/Xray/common/legocmd"
-	"github.com/xcode75/xraycore/common/net"
-	"github.com/xcode75/xraycore/common/uuid"
-	"github.com/xcode75/xraycore/core"
-	"github.com/xcode75/xraycore/infra/conf"
+	"github.com/xcode75/xray-core/common/net"
+	"github.com/xcode75/xray-core/common/uuid"
+	"github.com/xcode75/xray-core/core"
+	"github.com/xcode75/xray-core/infra/conf"
 )
 
 //InboundBuilder build Inbound config for different protocol

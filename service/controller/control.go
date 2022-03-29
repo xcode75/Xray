@@ -6,14 +6,14 @@ import (
 
 	"github.com/xcode75/Xray/api"
 	"github.com/xcode75/Xray/app/mydispatcher"
-	"github.com/xcode75/xraycore/common/protocol"
-	"github.com/xcode75/xraycore/core"
-	"github.com/xcode75/xraycore/features/inbound"
-	"github.com/xcode75/xraycore/features/outbound"
-	"github.com/xcode75/xraycore/features/routing"
-	"github.com/xcode75/xraycore/app/router"
-	"github.com/xcode75/xraycore/features/stats"
-	"github.com/xcode75/xraycore/proxy"
+	"github.com/xcode75/xray-core/common/protocol"
+	"github.com/xcode75/xray-core/core"
+	"github.com/xcode75/xray-core/features/inbound"
+	"github.com/xcode75/xray-core/features/outbound"
+	"github.com/xcode75/xray-core/features/routing"
+	"github.com/xcode75/xray-core/app/router"
+	"github.com/xcode75/xray-core/features/stats"
+	"github.com/xcode75/xray-core/proxy"
 )
 
 func (c *Controller) removeInbound(tag string) error {

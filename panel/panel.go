@@ -14,11 +14,11 @@ import (
 	"github.com/xcode75/Xray/service/controller"
 	"github.com/imdario/mergo"
 	"github.com/r3labs/diff/v2"
-	"github.com/xcode75/xraycore/app/proxyman"
-	"github.com/xcode75/xraycore/app/stats"
-	"github.com/xcode75/xraycore/common/serial"
-	"github.com/xcode75/xraycore/core"
-	"github.com/xcode75/xraycore/infra/conf"
+	"github.com/xcode75/xray-core/app/proxyman"
+	"github.com/xcode75/xray-core/app/stats"
+	"github.com/xcode75/xray-core/common/serial"
+	"github.com/xcode75/xray-core/core"
+	"github.com/xcode75/xray-core/infra/conf"
 )
 
 // Panel Structure

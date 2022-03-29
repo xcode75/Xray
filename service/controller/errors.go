@@ -1,4 +1,4 @@
-package limiter
+package controller
 
 import "github.com/xcode75/xray-core/common/errors"
 

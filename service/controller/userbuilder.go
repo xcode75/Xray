@@ -5,12 +5,12 @@ import (
 	"strings"
 
 	"github.com/xcode75/Xray/api"
-	"github.com/xcode75/xraycore/common/protocol"
-	"github.com/xcode75/xraycore/common/serial"
-	"github.com/xcode75/xraycore/infra/conf"
-	"github.com/xcode75/xraycore/proxy/shadowsocks"
-	"github.com/xcode75/xraycore/proxy/trojan"
-	"github.com/xcode75/xraycore/proxy/vless"
+	"github.com/xcode75/xray-core/common/protocol"
+	"github.com/xcode75/xray-core/common/serial"
+	"github.com/xcode75/xray-core/infra/conf"
+	"github.com/xcode75/xray-core/proxy/shadowsocks"
+	"github.com/xcode75/xray-core/proxy/trojan"
+	"github.com/xcode75/xray-core/proxy/vless"
 )
 
 var AEADMethod = []shadowsocks.CipherType{shadowsocks.CipherType_AES_128_GCM, shadowsocks.CipherType_AES_256_GCM, shadowsocks.CipherType_CHACHA20_POLY1305}

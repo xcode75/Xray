@@ -452,8 +452,8 @@ func (c *APIClient) ParseUserListResponse(userInfoResponse *[]UserResponse) (*[]
 }
 
 
-// GetNodeInfo will pull GetRelayNodeInfo Config from xmanager
-func (c *APIClient) GetRelayNodeInfo() (relaynodeInfo *api.RelayNodeInfo, err error) {
+// GetNodeInfo will pull GetTransitNodeInfo Config from xmanager
+func (c *APIClient) GetTransitNodeInfo() (transitnodeinfo *api.TransitNodeInfo, err error) {
 	path := fmt.Sprintf("/api/server/relay/%d/info", c.NodeID)
 	res, err := c.client.R().
 		SetResult(&Response{}).
@@ -465,25 +465,25 @@ func (c *APIClient) GetRelayNodeInfo() (relaynodeInfo *api.RelayNodeInfo, err er
 		return nil, err
 	}
 
-	relaynodeInfoResponse := new(RelayNodeInfoResponse)
+	nodeResponse := new(TransitNodeInfoResponse)
 
-	if err := json.Unmarshal(response.Data, relaynodeInfoResponse); err != nil {
-		return nil, fmt.Errorf("Unmarshal %s failed: %s", reflect.TypeOf(relaynodeInfoResponse), err)
+	if err := json.Unmarshal(response.Data, nodeResponse); err != nil {
+		return nil, fmt.Errorf("Unmarshal %s failed: %s", reflect.TypeOf(nodeResponse), err)
 	}
 
-    relaynodeInfo, err = c.ParseRelayNodeResponse(relaynodeInfoResponse)	
+    transitnodeinfo, err = c.ParseTransitNodeResponse(nodeResponse)	
 
 	if err != nil {
-		res, _ := json.Marshal(relaynodeInfoResponse)
+		res, _ := json.Marshal(nodeResponse)
 		return nil, fmt.Errorf("Parse relay node info failed: %s", string(res))
 	}
 
-	return relaynodeInfo, nil
+	return transitnodeinfo, nil
 }
 
 
 
-func (c *APIClient) ParseRelayNodeResponse(nodeInfoResponse *RelayNodeInfoResponse) (*api.RelayNodeInfo, error) {
+func (c *APIClient) ParseTransitNodeResponse(nodeInfoResponse *TransitNodeInfoResponse) (*api.TransitNodeInfo, error) {
 	var  enableTLS bool
 	var  transportProtocol string
 	var  speedlimit uint64 = 0
@@ -565,9 +565,9 @@ func (c *APIClient) ParseRelayNodeResponse(nodeInfoResponse *RelayNodeInfoRespon
 		
     speedlimit = uint64((nodeInfoResponse.SpeedLimit * 1000000) / 8)
 	
-	nodeinfo := &api.RelayNodeInfo{
+	nodeinfo := &api.TransitNodeInfo{
 		NodeType:          nodeInfoResponse.Type,
-		NodeID:            nodeInfoResponse.RelayNodeID,
+		NodeID:            nodeInfoResponse.NodeID,
 		Port:              port,
 		SpeedLimit:        speedlimit,
 		AlterID:           0,

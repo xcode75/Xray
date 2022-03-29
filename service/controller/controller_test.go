@@ -12,8 +12,8 @@ import (
 	"github.com/xcode75/Xray/api/xmanager"
 	_ "github.com/xcode75/Xray/main/distro/all"
 	. "github.com/xcode75/Xray/service/controller"
-	"github.com/xcode75/xraycore/core"
-	"github.com/xcode75/xraycore/infra/conf"
+	"github.com/xcode75/xray-core/core"
+	"github.com/xcode75/xray-core/infra/conf"
 )
 
 func TestController(t *testing.T) {

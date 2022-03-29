@@ -4,8 +4,8 @@ import (
 	"io"
 
 	"github.com/juju/ratelimit"
-	"github.com/xcode75/xraycore/common"
-	"github.com/xcode75/xraycore/common/buf"
+	"github.com/xcode75/xray-core/common"
+	"github.com/xcode75/xray-core/common/buf"
 )
 
 type Writer struct {

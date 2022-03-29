@@ -1,6 +1,6 @@
 package mydispatcher
 
-//go:generate go run github.com/xcode75/xraycore/common/errors/errorgen
+//go:generate go run github.com/xcode75/xray-core/common/errors/errorgen
 
 import (
 	"context"
@@ -11,22 +11,22 @@ import (
 
 	"github.com/xcode75/Xray/common/limiter"
 	"github.com/xcode75/Xray/common/rule"
-	"github.com/xcode75/xraycore/common"
-	"github.com/xcode75/xraycore/common/buf"
-	"github.com/xcode75/xraycore/common/log"
-	"github.com/xcode75/xraycore/common/net"
-	"github.com/xcode75/xraycore/common/protocol"
-	"github.com/xcode75/xraycore/common/session"
-	"github.com/xcode75/xraycore/core"
-	"github.com/xcode75/xraycore/features/dns"
-	"github.com/xcode75/xraycore/features/outbound"
-	"github.com/xcode75/xraycore/features/policy"
-	"github.com/xcode75/xraycore/features/routing"
-	routing_session "github.com/xcode75/xraycore/features/routing/session"
-	"github.com/xcode75/xraycore/features/stats"
-	"github.com/xcode75/xraycore/transport"
-	"github.com/xcode75/xraycore/transport/pipe"
-	router_ru "github.com/xcode75/xraycore/app/router"
+	"github.com/xcode75/xray-core/common"
+	"github.com/xcode75/xray-core/common/buf"
+	"github.com/xcode75/xray-core/common/log"
+	"github.com/xcode75/xray-core/common/net"
+	"github.com/xcode75/xray-core/common/protocol"
+	"github.com/xcode75/xray-core/common/session"
+	"github.com/xcode75/xray-core/core"
+	"github.com/xcode75/xray-core/features/dns"
+	"github.com/xcode75/xray-core/features/outbound"
+	"github.com/xcode75/xray-core/features/policy"
+	"github.com/xcode75/xray-core/features/routing"
+	routing_session "github.com/xcode75/xray-core/features/routing/session"
+	"github.com/xcode75/xray-core/features/stats"
+	"github.com/xcode75/xray-core/transport"
+	"github.com/xcode75/xray-core/transport/pipe"
+	router_ru "github.com/xcode75/xray-core/app/router"
 )
 
 var errSniffingTimeout = newError("timeout on sniffing")

@@ -1,6 +1,6 @@
 package rule
 
-import "github.com/xcode75/xraycore/common/errors"
+import "github.com/xcode75/xray-core/common/errors"
 
 type errPathObjHolder struct{}
 

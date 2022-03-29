@@ -3,10 +3,10 @@ package mydispatcher
 import (
 	"context"
 
-	"github.com/xcode75/xraycore/common"
-	"github.com/xcode75/xraycore/common/protocol/bittorrent"
-	"github.com/xcode75/xraycore/common/protocol/http"
-	"github.com/xcode75/xraycore/common/protocol/tls"
+	"github.com/xcode75/xray-core/common"
+	"github.com/xcode75/xray-core/common/protocol/bittorrent"
+	"github.com/xcode75/xray-core/common/protocol/http"
+	"github.com/xcode75/xray-core/common/protocol/tls"
 )
 
 type SniffResult interface {

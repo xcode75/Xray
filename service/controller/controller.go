@@ -9,9 +9,9 @@ import (
 	"github.com/xcode75/Xray/api"
 	"github.com/xcode75/Xray/common/legocmd"
 	"github.com/xcode75/Xray/common/serverstatus"
-	"github.com/xcode75/xraycore/common/protocol"
-	"github.com/xcode75/xraycore/common/task"
-	"github.com/xcode75/xraycore/core"
+	"github.com/xcode75/xray-core/common/protocol"
+	"github.com/xcode75/xray-core/common/task"
+	"github.com/xcode75/xray-core/core"
 
 )
 
@@ -21,9 +21,9 @@ type Controller struct {
 	clientInfo              api.ClientInfo
 	apiClient               api.API
 	nodeInfo                *api.NodeInfo
-	relaynodeInfo           *api.RelayNodeInfo
+	transitnodeInfo         *api.TransitNodeInfo
 	Tag                     string
-	RelayTag                string
+	TransitTag              string
 	Rtag                    bool
 	userList                *[]api.UserInfo
 	nodeInfoMonitorPeriodic *task.Periodic
@@ -61,16 +61,16 @@ func (c *Controller) Start() error {
 	c.Tag = c.buildTag()
 		
 	c.Rtag = false
-	// Add new relay tag
+	// Add new Transit	tag
 	if c.nodeInfo.Relay == 1 {	
-		newRelayNodeInfo, err := c.apiClient.GetRelayNodeInfo()
+		newTransitNodeInfo, err := c.apiClient.GetTransitNodeInfo()
 		if err != nil {
 			log.Panic(err)
 			return nil
 		}	
-		c.relaynodeInfo = 	newRelayNodeInfo
-		c.RelayTag = c.buildRTag()
-		err = c.Relay(newRelayNodeInfo, userInfo)
+		c.transitnodeInfo = newTransitNodeInfo
+		c.TransitTag = c.buildRTag()
+		err = c.Transit(newTransitNodeInfo, userInfo)
 		if err != nil {
 				log.Panic(err)
 				return err
@@ -173,7 +173,7 @@ func (c *Controller) nodeInfoMonitor() (err error) {
 		}
 		
 		if c.Rtag == true {
-			err := c.removeRelayTag(c.RelayTag, c.userList)
+			err := c.removeTransitTag(c.TransitTag, c.userList)
 			if err != nil {
 				return err
 			}
@@ -192,16 +192,16 @@ func (c *Controller) nodeInfoMonitor() (err error) {
 		
 		c.Rtag = false
 		
-		// Add new relay tag
+		// Add new Transit tag
 		if newNodeInfo.Relay == 1 {
-			newRelayNodeInfo, err := c.apiClient.GetRelayNodeInfo()
+			newTransitNodeInfo, err := c.apiClient.GetTransitNodeInfo()
 			if err != nil {
 				log.Print(err)
 				return nil
 			}
-			c.relaynodeInfo = newRelayNodeInfo
-			c.RelayTag = c.buildRTag()
-			err = c.Relay(newRelayNodeInfo, newUserInfo)
+			c.transitnodeInfo = newTransitNodeInfo
+			c.TransitTag = c.buildRTag()
+			err = c.Transit(newTransitNodeInfo, newUserInfo)
 			if err != nil {
 					log.Panic(err)
 					return err
@@ -300,7 +300,7 @@ func (c *Controller) removeOldTag(oldtag string) (err error) {
 	return nil
 }
 
-func (c *Controller) removeRelayTag(tag string, userInfo *[]api.UserInfo) (err error) {
+func (c *Controller) removeTransitTag(tag string, userInfo *[]api.UserInfo) (err error) {
 	for _, user := range *userInfo {
 		err = c.removeOutbound(fmt.Sprintf("Relay_%s|%d", tag,user.UID))
 		if err != nil {
@@ -344,18 +344,18 @@ func (c *Controller) addNewTag(newNodeInfo *api.NodeInfo) (err error) {
 	return nil
 }
 
-func (c *Controller) Relay(newRelayNodeInfo *api.RelayNodeInfo, userInfo *[]api.UserInfo) (err error) {
-	if newRelayNodeInfo.NodeType != "Shadowsocks-Plugin" {
+func (c *Controller) Transit(newTransitNodeInfo *api.TransitNodeInfo, userInfo *[]api.UserInfo) (err error) {
+	if newTransitNodeInfo.NodeType != "Shadowsocks-Plugin" {
 		for _, user := range *userInfo {			
-			outRelayBoundConfig, err := OutRelayboundBuilder(c.config, newRelayNodeInfo, c.RelayTag, user.UUID, user.Email, user.Passwd, user.UID)
+			TransitConfig, err := TransitBuilder(c.config, newTransitNodeInfo, c.TransitTag, user.UUID, user.Email, user.Passwd, user.UID)
 			if err != nil {
 				return err
 			}
-			err = c.addOutbound(outRelayBoundConfig)
+			err = c.addOutbound(TransitConfig)
 			if err != nil {
 				return err
 			}
-			c.AddUserRoutingRule(fmt.Sprintf("Relay_%s|%d", c.RelayTag,user.UID), []string{fmt.Sprintf("%s|%s|%d", c.Tag, user.Email, user.UID)})		
+			c.AddUserRoutingRule(fmt.Sprintf("Relay_%s|%d", c.TransitTag,user.UID), []string{fmt.Sprintf("%s|%s|%d", c.Tag, user.Email, user.UID)})		
 		}
 	}	
 	return nil
@@ -541,5 +541,5 @@ func (c *Controller) buildTag() string {
 }
 
 func (c *Controller) buildRTag() string {
-	return fmt.Sprintf("%s_%d_%d", c.relaynodeInfo.NodeType, c.relaynodeInfo.Port, c.relaynodeInfo.NodeID)
+	return fmt.Sprintf("%s_%d_%d", c.transitnodeInfo.NodeType, c.transitnodeInfo.Port, c.transitnodeInfo.NodeID)
 }

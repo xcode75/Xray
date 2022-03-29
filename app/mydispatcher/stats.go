@@ -1,9 +1,9 @@
 package mydispatcher
 
 import (
-	"github.com/xcode75/xraycore/common"
-	"github.com/xcode75/xraycore/common/buf"
-	"github.com/xcode75/xraycore/features/stats"
+	"github.com/xcode75/xray-core/common"
+	"github.com/xcode75/xray-core/common/buf"
+	"github.com/xcode75/xray-core/features/stats"
 )
 
 type SizeStatWriter struct {

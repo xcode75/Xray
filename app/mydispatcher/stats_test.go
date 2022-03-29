@@ -3,9 +3,9 @@ package mydispatcher_test
 import (
 	"testing"
 
-	. "github.com/xcode75/xraycore/app/dispatcher"
-	"github.com/xcode75/xraycore/common"
-	"github.com/xcode75/xraycore/common/buf"
+	. "github.com/xcode75/xray-core/app/dispatcher"
+	"github.com/xcode75/xray-core/common"
+	"github.com/xcode75/xray-core/common/buf"
 )
 
 type TestCounter int64

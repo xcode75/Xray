@@ -22,7 +22,7 @@ type NodeInfoResponse struct {
 	Sniffing        bool    `json:"sniffing"`
 }
 
-type RelayNodeInfoResponse struct {
+type TransitNodeInfoResponse struct {
 	SpeedLimit      float64 `json:"speedlimit"`
 	Method		    string  `json:"method"`
 	Port		    int     `json:"port"`
@@ -35,7 +35,7 @@ type RelayNodeInfoResponse struct {
     Protocol        string  `json:"protocol"`	
 	AllowInsecure   bool    `json:"allowinsecure"`
 	Relay			int     `json:"relay"`
-	RelayNodeID		int     `json:"relayid"`
+	NodeID		    int     `json:"relayid"`
 	ListenIP        string  `json:"listenip"`
 	ProxyProtocol   bool    `json:"proxyprotocol"`
 	Sniffing        bool    `json:"sniffing"`

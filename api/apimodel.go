@@ -44,7 +44,7 @@ type NodeInfo struct {
 	Sniffing          bool
 }
 
-type RelayNodeInfo struct {
+type TransitNodeInfo struct {
 	NodeType          string // Must be V2ray, Trojan, and Shadowsocks
 	NodeID            int
 	Port              int
