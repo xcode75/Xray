@@ -185,7 +185,7 @@ func InboundBuilder(config *Config, nodeInfo *api.NodeInfo, tag string) (*core.I
 			}
 			streamSetting.XTLSSettings = xtlsSettings
 		}
-	}elseif config.CertConfig.CertMode == "nginx"{
+	}else if config.CertConfig.CertMode == "nginx"{
 		certFile, keyFile, err := getCertFile(config.CertConfig)
 		if err == nil {
 			return certFile, keyFile, err
