@@ -146,6 +146,8 @@ install_Xray() {
     cp geoip.dat /etc/Xray/
     cp geosite.dat /etc/Xray/ 
     cp dns.json /etc/Xray/
+	cp route.json /etc/Xray/
+	cp outbound.json /etc/Xray/
     cp rulelist /etc/Xray/
 
     if [[ ! -f /etc/Xray/config.yml ]]; then
