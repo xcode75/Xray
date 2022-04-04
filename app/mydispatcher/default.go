@@ -142,7 +142,7 @@ func (*DefaultDispatcher) Start() error {
 // Close implements common.Closable.
 func (*DefaultDispatcher) Close() error { return nil }
 
-func (d *DefaultDispatcher) getLink(ctx context.Context) (*transport.Link, *transport.Link) {
+func (d *DefaultDispatcher) getLink(ctx context.Context) (*transport.Link, *transport.Link, error) {
 	opt := pipe.OptionsFromContext(ctx)
 	uplinkReader, uplinkWriter := pipe.New(opt...)
 	downlinkReader, downlinkWriter := pipe.New(opt...)
@@ -172,6 +172,7 @@ func (d *DefaultDispatcher) getLink(ctx context.Context) (*transport.Link, *tran
 			common.Close(inboundLink.Writer)
 			common.Interrupt(outboundLink.Reader)
 			common.Interrupt(inboundLink.Reader)
+			return nil, nil, newError("Devices limit Reached: ", user.Email)
 		}
 		if ok {
 			inboundLink.Writer = d.Limiter.RateWriter(inboundLink.Writer, bucket)
@@ -198,7 +199,7 @@ func (d *DefaultDispatcher) getLink(ctx context.Context) (*transport.Link, *tran
 		}
 	}
 
-	return inboundLink, outboundLink
+	return inboundLink, outboundLink, nil
 }
 
 func shouldOverride(ctx context.Context, result SniffResult, request session.SniffingRequest, destination net.Destination) bool {
@@ -245,7 +246,10 @@ func (d *DefaultDispatcher) Dispatch(ctx context.Context, destination net.Destin
 	}
 	ctx = session.ContextWithOutbound(ctx, ob)
 
-	inbound, outbound := d.getLink(ctx)
+	inbound, outbound, err := d.getLink(ctx)
+	if err != nil {
+		return nil, err
+	}
 	content := session.ContentFromContext(ctx)
 	if content == nil {
 		content = new(session.Content)

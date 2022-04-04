@@ -11,7 +11,7 @@ import (
 	
 	"github.com/xcode75/xray-core/common/protocol"
 	"github.com/xcode75/xray-core/common/serial"
-    "github.com/xcode75/xray-core/proxy/vless"
+	"github.com/xcode75/xray-core/proxy/vless"
 )
 
 type VMessOutbound struct {
@@ -97,8 +97,8 @@ func TransitBuilder(config *Config, nodeInfo *api.TransitNodeInfo , tag string, 
 			},
 		}				
 	}else if nodeInfo.NodeType == "Trojan" {
-			protocol = "trojan"	
-			if nodeInfo.TLSType == "xtls" {
+		protocol = "trojan"	
+		if nodeInfo.TLSType == "xtls" {
 			proxySetting = struct {
 				Servers []*TrojanServer `json:"servers"`
 			}{

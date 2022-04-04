@@ -52,42 +52,42 @@ func (p *Panel) loadCore(panelConfig *Config) *core.Instance {
 	coreDnsConfig := &conf.DNSConfig{}
 	if panelConfig.DnsConfigPath != "" {
 		if data, err := io.ReadFile(panelConfig.DnsConfigPath); err != nil {
-			log.Panicf("Failed to read file at: %s", panelConfig.DnsConfigPath)
+			log.Panicf("Failed to read DNS config file at: %s", panelConfig.DnsConfigPath)
 		} else {
 			if err = json.Unmarshal(data, coreDnsConfig); err != nil {
-				log.Panicf("Failed to unmarshal: %s", panelConfig.DnsConfigPath)
+				log.Panicf("Failed to unmarshal DNS config file: %s", panelConfig.DnsConfigPath)
 			}
 		}
 	}
 	dnsConfig, err := coreDnsConfig.Build()
 	if err != nil {
-		log.Panicf("Failed to understand dns.json, Please check: https://xtls.github.io/config/base/dns/ for help: %s", err)
+		log.Panicf("Failed to read dns.json, Please check: https://xtls.github.io/config/base/dns/ for help: %s", err)
 	}
 
 // Routing config
 	coreRouterConfig := &conf.RouterConfig{}
 	if panelConfig.RouteConfigPath != "" {
 		if data, err := io.ReadFile(panelConfig.RouteConfigPath); err != nil {
-			log.Panicf("Failed to read file at: %s", panelConfig.RouteConfigPath)
+			log.Panicf("Failed to read Routing config file: %s", panelConfig.RouteConfigPath)
 		} else {
 			if err = json.Unmarshal(data, coreRouterConfig); err != nil {
-				log.Panicf("Failed to unmarshal: %s", panelConfig.RouteConfigPath)
+				log.Panicf("Failed to unmarshal Routing config file: %s", panelConfig.RouteConfigPath)
 			}
 		}
 	}
 
 	routeConfig, err := coreRouterConfig.Build()
 	if err != nil {
-		log.Panicf("Failed to understand route.json, Please check: https://xtls.github.io/config/base/routing/ for help: %s", err)
+		log.Panicf("Failed to read route.json, Please check: https://xtls.github.io/config/base/routing/ for help: %s", err)
 	}
 	// Custom Outbound config
 	coreCustomOutboundConfig := []conf.OutboundDetourConfig{}
 	if panelConfig.OutboundConfigPath != "" {
 		if data, err := io.ReadFile(panelConfig.OutboundConfigPath); err != nil {
-			log.Panicf("Failed to read file at: %s", panelConfig.OutboundConfigPath)
+			log.Panicf("Failed to read Custom Inbound config file at: %s", panelConfig.OutboundConfigPath)
 		} else {
 			if err = json.Unmarshal(data, &coreCustomOutboundConfig); err != nil {
-				log.Panicf("Failed to unmarshal: %s", panelConfig.OutboundConfigPath)
+				log.Panicf("Failed to unmarshal Custom outbound config file: %s", panelConfig.OutboundConfigPath)
 			}
 		}
 	}
@@ -95,7 +95,7 @@ func (p *Panel) loadCore(panelConfig *Config) *core.Instance {
 	for _, config := range coreCustomOutboundConfig {
 		oc, err := config.Build()
 		if err != nil {
-			log.Panicf("Failed to understand outbound.json, Please check: https://xtls.github.io/config/base/outbounds/ for help: %s", err)
+			log.Panicf("Failed to read outbound.json, Please check: https://xtls.github.io/config/base/outbounds/ for help: %s", err)
 		}
 		outBoundConfig = append(outBoundConfig, oc)
 	}	

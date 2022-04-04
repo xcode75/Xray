@@ -7,7 +7,7 @@ import (
 	
 	"github.com/golang/protobuf/proto"
 
-    "github.com/xcode75/xray-core/infra/conf"
+	"github.com/xcode75/xray-core/infra/conf"
 	"github.com/xcode75/xray-core/common/net"
 	"github.com/xcode75/xray-core/common/protocol"
 	"github.com/xcode75/xray-core/common/serial"
