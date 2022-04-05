@@ -13,8 +13,6 @@ RUN  apk --update --no-cache add tzdata ca-certificates \
  	
 RUN mkdir /etc/Xray/
 COPY --from=builder /app/Xray /usr/local/bin
-COPY --from=builder /app/Xray/geoip.dat  /usr/local/bin/geoip.dat
-COPY --from=builder /app/Xray/geosite.dat  /usr/local/bin/geosite.dat
 
 ENTRYPOINT [ "/usr/local/bin/Xray", "--config"]
 CMD ["/etc/Xray/config.yml"]
