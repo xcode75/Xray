@@ -428,6 +428,7 @@ func (d *DefaultDispatcher) routedDispatch(ctx context.Context, link *transport.
 
 	// Check if domain and protocol hit the rule
 	sessionInbound := session.InboundFromContext(ctx)
+	
 	// Whether the inbound connection contains a user
 	if sessionInbound.User != nil {
 		if d.RuleManager.Detect(sessionInbound.Tag, destination.String(), sessionInbound.User.Email) {
@@ -460,7 +461,7 @@ func (d *DefaultDispatcher) routedDispatch(ctx context.Context, link *transport.
 				newError("Taking detour 【", tag, "】 for 【", destination, "】").WriteToLog(session.ExportIDToError(ctx))
 				handler = h
 			} else {
-				newError("non existing outTag: ", tag).AtWarning().WriteToLog(session.ExportIDToError(ctx))
+				newError("non existing outTag: 【", tag, "】").AtWarning().WriteToLog(session.ExportIDToError(ctx))
 			}
 		} else {
 			newError("Default route for ", destination).WriteToLog(session.ExportIDToError(ctx))
