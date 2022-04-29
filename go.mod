@@ -11,12 +11,14 @@ require (
 	github.com/golang/protobuf v1.5.2
 	github.com/imdario/mergo v0.3.12
 	github.com/juju/ratelimit v1.0.1
+	github.com/lucas-clemente/quic-go v0.27.0
 	github.com/r3labs/diff/v2 v2.15.1
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/spf13/viper v1.11.0
 	github.com/stretchr/testify v1.7.1
 	github.com/tklauser/go-sysconf v0.3.10 // indirect
 	github.com/urfave/cli v1.22.8
+	github.com/miekg/dns v1.1.48
 	github.com/xcode75/xray-core v1.5.7
 	golang.org/x/net v0.0.0-20220412020605-290c469a71a5
 	google.golang.org/appengine v1.6.7 // indirect
@@ -82,13 +84,11 @@ require (
 	github.com/liquidweb/go-lwApi v0.0.5 // indirect
 	github.com/liquidweb/liquidweb-cli v0.6.10 // indirect
 	github.com/liquidweb/liquidweb-go v1.6.3 // indirect
-	github.com/lucas-clemente/quic-go v0.26.0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/marten-seemann/qtls-go1-16 v0.1.5 // indirect
 	github.com/marten-seemann/qtls-go1-17 v0.1.1 // indirect
 	github.com/marten-seemann/qtls-go1-18 v0.1.1 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
-	github.com/miekg/dns v1.1.47 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
