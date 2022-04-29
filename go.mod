@@ -20,7 +20,7 @@ require (
 	github.com/urfave/cli v1.22.8
 	github.com/miekg/dns v1.1.48
 	google.golang.org/grpc v1.46.0
-	github.com/xcode75/xray-core v1.5.7
+	github.com/xcode75/xray-core v1.5.8
 	golang.org/x/net v0.0.0-20220421235706-1d1ef9303861
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.28.0
