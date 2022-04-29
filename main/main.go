@@ -23,17 +23,13 @@ var (
 )
 
 var (
-	version  = "v0.8.0.0"
-	maintainer = "Maintainer: Github/xcode75"
+	version  = "v0.8.1"
 	intro    = "An Xray Server For XManager"
-	credits  = "Credits : Github/XrayR-project"
 )
 
 func showVersion() {
 	fmt.Printf("%s \n", intro)
 	fmt.Printf("%s \n", version)
-	fmt.Printf("%s \n", maintainer)
-	fmt.Printf("%s \n",credits)
 }
 
 func getConfig() *viper.Viper {
