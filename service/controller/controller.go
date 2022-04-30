@@ -116,7 +116,7 @@ func (c *Controller) Start() error {
 		Execute:  c.userInfoMonitor,
 	}
 	
-	log.Printf("【NodeType】：%s 【NodeID】: %d Task Scheduler Started", c.nodeInfo.NodeType,c.nodeInfo.NodeID)
+	log.Printf("【NodeType：%s NodeID: %d 】Task Scheduler Started", c.nodeInfo.NodeType,c.nodeInfo.NodeID)
 	c.nodeInfoMonitorPeriodic.Start()
 	c.userReportPeriodic.Start()
 	return nil
@@ -269,7 +269,7 @@ func (c *Controller) nodeInfoMonitor() (err error) {
 			if err != nil {
 				log.Print(err)
 			}
-			log.Printf("【NodeType】：%s 【NodeID】: %d  Deleted %d Users", c.nodeInfo.NodeType,c.nodeInfo.NodeID, len(deleted))
+			log.Printf("【NodeType：%s NodeID: %d 】  Deleted %d Users", c.nodeInfo.NodeType,c.nodeInfo.NodeID, len(deleted))
 		}
 		if len(added) > 0 {
 			err = c.addNewUser(&added, c.nodeInfo)
@@ -280,7 +280,7 @@ func (c *Controller) nodeInfoMonitor() (err error) {
 			if err := c.UpdateInboundLimiter(c.Tag, &added); err != nil {
 				log.Print(err)
 			}
-			//log.Printf("【NodeType】：%s 【NodeID】: %d  Added %d Users", c.nodeInfo.NodeType,c.nodeInfo.NodeID, len(added))
+			//log.Printf("【NodeType：%s NodeID: %d 】  Added %d Users", c.nodeInfo.NodeType,c.nodeInfo.NodeID, len(added))
 		}
 	}
 	c.userList = newUserInfo
@@ -432,7 +432,7 @@ func (c *Controller) addNewUser(userInfo *[]api.UserInfo, nodeInfo *api.NodeInfo
 	if err != nil {
 		return err
 	}
-	log.Printf("【NodeType】：%s 【NodeID】: %d  Added %d New Users", c.nodeInfo.NodeType,c.nodeInfo.NodeID, len(*userInfo))
+	log.Printf("【NodeType：%s NodeID: %d 】  Added %d New Users", c.nodeInfo.NodeType,c.nodeInfo.NodeID, len(*userInfo))
 	
 	return nil
 }
@@ -528,7 +528,7 @@ func (c *Controller) userInfoMonitor() (err error) {
 		if err = c.apiClient.ReportIllegal(detectResult); err != nil {
 			log.Print(err)
 		} else {
-			log.Printf("【NodeType】：%s 【NodeID】: %d  Report %d Activities matching rules", c.nodeInfo.NodeType,c.nodeInfo.NodeID, len(*detectResult))
+			log.Printf("【NodeType：%s NodeID: %d 】  Report %d Activities matching rules", c.nodeInfo.NodeType,c.nodeInfo.NodeID, len(*detectResult))
 		}
 
 	}

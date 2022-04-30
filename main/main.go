@@ -23,13 +23,12 @@ var (
 )
 
 var (
-	version  = "v0.8.1"
+	version  = "v0.8.2"
 	intro    = "An Xray Server For XManager"
 )
 
 func showVersion() {
-	fmt.Printf("%s \n", intro)
-	fmt.Printf("%s \n", version)
+	fmt.Printf("%s - %s \n", version,intro)
 }
 
 func getConfig() *viper.Viper {
