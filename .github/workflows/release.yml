@@ -40,7 +40,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: ^1.17.2
+          go-version: 1.18
 
       - name: Get project dependencies
         run: go mod download
@@ -88,10 +88,10 @@ jobs:
       - name: Change the name
         run: |
           mv build_assets Xray-$ASSET_NAME
-      #- name: Remove old artifacts
-      #  uses: c-hive/gha-remove-artifacts@v1
-      #  with:
-      #    age: '1 week' 
+      - name: Remove old artifacts
+        uses: c-hive/gha-remove-artifacts@v1
+        with:
+          age: '1 day' 
       - name: Upload files to Artifacts
         uses: actions/upload-artifact@v2
         with:

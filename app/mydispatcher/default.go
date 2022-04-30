@@ -97,7 +97,6 @@ type DefaultDispatcher struct {
 	RouterRule  *router_ru.Router
 	policy      policy.Manager
 	stats       stats.Manager
-	//hosts       dns.HostsLookup
 	dns    dns.Client
 	fdns   dns.FakeDNSEngine
 	Limiter     *limiter.Limiter
@@ -128,9 +127,6 @@ func (d *DefaultDispatcher) Init(config *Config, om outbound.Manager, router rou
 	d.Limiter = limiter.New()
 	d.RuleManager = rule.New()
 	d.RouterRule = router_ru.NewRouter()
-	//if hosts, ok := dc.(dns.HostsLookup); ok {
-	//	d.hosts = hosts
-	//}
 	d.dns = dns
 	return nil
 }
@@ -149,10 +145,6 @@ func (*DefaultDispatcher) Start() error {
 func (*DefaultDispatcher) Close() error { return nil }
 
 func (d *DefaultDispatcher) getLink(ctx context.Context, network net.Network, sniffing session.SniffingRequest) (*transport.Link, *transport.Link, error) {
-	//opt := pipe.OptionsFromContext(ctx)
-	//uplinkReader, uplinkWriter := pipe.New(opt...)
-	//downlinkReader, downlinkWriter := pipe.New(opt...)
-	
 	downOpt := pipe.OptionsFromContext(ctx)
 	upOpt := downOpt
 
@@ -287,10 +279,6 @@ func (d *DefaultDispatcher) shouldOverride(ctx context.Context, result SniffResu
 			return false
 		}
 	}
-	//var fakeDNSEngine dns.FakeDNSEngine
-	//core.RequireFeatures(ctx, func(fdns dns.FakeDNSEngine) {
-	//	fakeDNSEngine = fdns
-	//})
 	protocolString := result.Protocol()
 	if resComp, ok := result.(SnifferResultComposite); ok {
 		protocolString = resComp.ProtocolForDomainResult()
@@ -323,11 +311,6 @@ func (d *DefaultDispatcher) Dispatch(ctx context.Context, destination net.Destin
 		Target: destination,
 	}
 	ctx = session.ContextWithOutbound(ctx, ob)
-
-	//inbound, outbound, err := d.getLink(ctx)
-	//if err != nil {
-	//	return nil, err
-	//}
 	content := session.ContentFromContext(ctx)
 	if content == nil {
 		content = new(session.Content)
@@ -531,10 +514,10 @@ func (d *DefaultDispatcher) routedDispatch(ctx context.Context, link *transport.
 		ctx = session.SetForcedOutboundTagToContext(ctx, "")
 		if h := d.ohm.GetHandler(forcedOutboundTag); h != nil {
 			isPickRoute = 1
-			newError("taking platform initialized detour 【", forcedOutboundTag, "】 for 【", destination, "】").WriteToLog(session.ExportIDToError(ctx))
+			newError("Taking platform initialized detour 【", forcedOutboundTag, "】 for 【", destination, "】").WriteToLog(session.ExportIDToError(ctx))
 			handler = h
 		} else {
-			newError("non existing tag for platform initialized detour: ", forcedOutboundTag).AtError().WriteToLog(session.ExportIDToError(ctx))
+			newError("Non existing tag for platform initialized detour: ", forcedOutboundTag).AtError().WriteToLog(session.ExportIDToError(ctx))
 			common.Close(link.Writer)
 			common.Interrupt(link.Reader)
 			return
@@ -547,7 +530,7 @@ func (d *DefaultDispatcher) routedDispatch(ctx context.Context, link *transport.
 				newError("Taking detour 【", outTag, "】 for 【", destination, "】").WriteToLog(session.ExportIDToError(ctx))
 				handler = h
 			} else {
-				newError("non existing outTag: 【", outTag, "】").AtWarning().WriteToLog(session.ExportIDToError(ctx))
+				newError("Non existing outTag: 【", outTag, "】").AtWarning().WriteToLog(session.ExportIDToError(ctx))
 			}
 		} else {
 			newError("Default route for ", destination).WriteToLog(session.ExportIDToError(ctx))
