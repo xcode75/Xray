@@ -140,7 +140,7 @@ install_Xray() {
     chmod +x Xray
     mkdir /etc/Xray/ -p
     rm /etc/systemd/system/Xray.service -f
-    file="https://github.com/Xray-project/xcode75/raw/master/Xray.service"
+    file="https://github.com/xcode75/Xray/raw/master/Xray.service"
     wget -q -N --no-check-certificate -O /etc/systemd/system/Xray.service ${file}
     #cp -f Xray.service /etc/systemd/system/
     systemctl daemon-reload
